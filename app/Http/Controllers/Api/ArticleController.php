@@ -66,24 +66,13 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::query()
-            ->select('name', 'description', 'type', 'file')
-            ->where('id', $id)
-            ->first();
+             ->select('name', 'description', 'type', 'file')->findOrFail($id);
 
-        if ($article) {
             $article->append('temporary_url');
-            $article->makeHidden(['file']);
 
             return apiResponse(
                 "Article retrieved successfully!",
                 $article
             );
-
-        } else {
-            return apiResponse(
-                "Article don't find!",
-                $article
-            );
-        }
     }
 }

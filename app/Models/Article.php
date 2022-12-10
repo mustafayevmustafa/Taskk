@@ -16,9 +16,14 @@ class Article extends Model
     protected $fillable = ['name', 'description', 'file', 'type'];
 
     /**
+     * @var string[]
+     */
+    protected $hidden = ['file'];
+
+    /**
      * @return string
      */
-    public function getTemporaryUrlAttribute():string
+    public function getTemporaryUrlAttribute()
     {
         return Storage::disk('local')->temporaryUrl('articles-'.$this->file, now()->addMinutes(1));
     }

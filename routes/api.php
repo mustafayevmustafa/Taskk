@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\TemporaryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -16,14 +17,8 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('article',[ArticleController::class, 'store']);
 Route::get('article',[ArticleController::class, 'index']);
 Route::get('article/{id}',[ArticleController::class, 'show']);
+Route::get('app/{path}',[TemporaryController::class, 'path'])->name('local.temp')->middleware('signed');
 
-Route::get('app/{path}', function (string $path){
-    return Storage::disk('local')->download(str_replace('-','/',$path));
-})->name('local.temp')->middleware('signed');
