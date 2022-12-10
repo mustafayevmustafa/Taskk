@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -16,21 +17,14 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        paginate($request, $limit, $offset);
-
         $articles = Article::query()
             ->select('name', 'description', 'type')
-            ->limit($limit)->offset($offset)
-            ->get();
+            ->simplePaginate(10);
 
         return apiResponse(
             'Articles retrieved successfully',
             [
                 'articles' => $articles
-            ],
-            [
-                'page'  => $request->page != null ? (int)$request->page : 1,
-                'limit' => $limit
             ]
         );
     }
@@ -74,5 +68,13 @@ class ArticleController extends Controller
                 "Article retrieved successfully!",
                 $article
             );
+    }
+
+    /**
+     * @param $path
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function getImage($path){
+        return Storage::disk('local')->download(str_replace('-','/',$path));
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
-use App\Http\Controllers\TemporaryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('article',[ArticleController::class, 'store']);
 Route::get('article',[ArticleController::class, 'index']);
 Route::get('article/{id}',[ArticleController::class, 'show']);
-Route::get('app/{path}',[TemporaryController::class, 'path'])->name('local.temp')->middleware('signed');
+Route::get('app/{path}',[ArticleController::class, 'getImage'])->name('local.temp')->middleware('signed');
 
